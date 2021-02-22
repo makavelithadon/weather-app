@@ -1,62 +1,37 @@
-import { useEffect, useState } from "react";
+import { Weather } from "./../../../types";
+import { useFetch } from "./../../../hooks";
 
-type Wheather = {
-  temp: number;
-  city: string;
+type FetchWeatherResult = {
+  current: Weather;
+  daily: [];
+  hourly: {};
 };
 
-type Error = {
-  message: string;
-  errCode: number;
-};
+function formatCurrent(response: any) {
+  return {
+    timestamp: response.current.dt,
+    temp: response.current.temp,
+    timezone: response.timezone,
+    description: response.current.weather[0].description,
+    wind: response.current.wind_speed,
+    humidity: response.current.humidity,
+    feeling: response.current.feels_like,
+  };
+}
 
-type WheathersProps = {
-  wheathers: Wheather[];
-  error: null | Error;
-};
+function formatResponse(response: any) {
+  return {
+    current: formatCurrent(response),
+    hourly: [],
+    daily: [],
+  };
+}
 
-type WheathersPropsWithLoading = WheathersProps & { loading?: boolean };
-
-export function useWheather(url: string): WheathersPropsWithLoading {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [wheathers, setWheathers] = useState([]);
-
-  function catchError({ statusText, status }: any) {
-    setError({
-      message: statusText,
-      errCode: status,
-    });
-  }
-
-  useEffect(() => {
-    if (!url) {
-      return;
-    }
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw response;
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        console.log({ data });
-
-        setWheathers(data);
-      })
-      .catch((err) => {
-        setLoading(false);
-        catchError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [url]);
+export function useWheather(url: string) {
+  const { data, loading, error } = useFetch<FetchWeatherResult>(url);
 
   return {
-    wheathers,
+    weather: data ? formatResponse(data) : data,
     loading,
     error,
   };
