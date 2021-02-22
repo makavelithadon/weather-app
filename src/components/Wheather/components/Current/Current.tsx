@@ -48,7 +48,7 @@ const StyledCurrent = styled.div`
 
 const StyledDate = styled.p`
   color: inherit;
-  font-weight: 200;
+  font-weight: 400;
   text-align: center;
   font-size: 1rem;
   opacity: 0.7;
@@ -57,12 +57,13 @@ const StyledDate = styled.p`
 
 const StyledLocation = styled.p`
   color: inherit;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   font-size: 2rem;
   opacity: 0.9;
   margin-top: 4px;
   margin-bottom: 42px;
+  letter-spacing: 1px;
 `;
 
 const StyledPicture = styled.img`
@@ -92,8 +93,8 @@ const StyledTemperature = styled.span`
   margin-bottom: 30px;
   background-image: linear-gradient(
     180deg,
-    rgb(255, 255, 255),
-    rgba(205, 205, 205, 0.5)
+    rgb(255, 255, 255) 25%,
+    rgba(205, 205, 205, 0.55)
   );
   background-size: 100%;
   background-repeat: repeat;
@@ -104,6 +105,7 @@ const StyledTemperature = styled.span`
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;
   opacity: 0.9;
+  line-height: 1.2;
 `;
 
 const StyledMetrics = styled.ul`
@@ -124,6 +126,9 @@ const StyledMetric = styled.li`
   position: relative;
   padding: 0 16px;
   list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &:not(:last-child)::after {
     content: "";
     width: 1px;
@@ -138,7 +143,7 @@ const StyledMetric = styled.li`
       rgba(0, 0, 0, 0.25) 50%,
       rgba(0, 0, 0, 0.25) 100%
     );
-    background-size: 100% 4px;
+    background-size: 100% 8px;
   }
 `;
 
@@ -152,7 +157,12 @@ const StyledMetricTitle = styled.span`
   }
 `;
 
-const StyledMetricPicture = styled.img``;
+const StyledMetricPicture = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  margin: 5px 0;
+`;
 
 const StyledMetricValue = styled.span``;
 
@@ -174,7 +184,7 @@ export function Current({ weather }: { weather: Weather }) {
           return (
             <StyledMetric key={metric}>
               <StyledMetricTitle>{metric}</StyledMetricTitle>
-              <StyledMetricPicture src="" alt="" />
+              <StyledMetricPicture></StyledMetricPicture>
               <StyledMetricValue>
                 {weather[metric as keyof Weather]}
               </StyledMetricValue>
